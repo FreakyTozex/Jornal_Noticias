@@ -1,0 +1,54 @@
+{% extends "noticias/base.html" %}
+
+{% block title %}Comentários — {{ artigo.titulo }} — O Diário{% endblock %}
+
+{% block content %}
+<a href="{% url 'detalhe_artigo' artigo.id %}" class="back-link">Voltar ao artigo</a>
+
+<div class="section-heading" style="margin-bottom: 1.5rem;">
+    <h1>Comentários</h1>
+</div>
+
+<p style="font-family: var(--serif); font-size: 1.2rem; font-style: italic; color: var(--ink-light); margin-bottom: 2rem; line-height: 1.35;">
+    "{{ artigo.titulo }}"
+</p>
+
+<!-- Formulário para novo comentário -->
+<div class="comment-form-box">
+    <p style="font-size: 0.78rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 1.2rem;">
+        Publicar um comentário
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <label for="texto" class="comment-form-label">O seu comentário</label>
+        <textarea
+            id="texto"
+            name="texto"
+            class="comment-form-textarea"
+            placeholder="Escreva o seu comentário aqui…"
+            required
+        ></textarea>
+        <div class="comment-form-actions">
+            <button type="submit" class="btn">Submeter Comentário</button>
+        </div>
+    </form>
+</div>
+
+<!-- Lista de comentários -->
+<div class="section-heading" style="margin-bottom: 1.5rem;">
+    <h1>{{ comentarios.count }} Comentário{% if comentarios.count != 1 %}s{% endif %}</h1>
+</div>
+
+{% if comentarios %}
+<ul class="comments-list">
+    {% for comentario in comentarios %}
+    <li class="comment-item">
+        <p class="comment-text">{{ comentario.texto }}</p>
+        <p class="comment-date">{{ comentario.data_publicacao|date:"j \d\e F \d\e Y · H\hi" }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="empty-state">Ainda não há comentários. Seja o primeiro a comentar!</p>
+{% endif %}
+{% endblock %}

@@ -5,13 +5,13 @@ from .models import Artigo, Comentario
 def lista_artigos(request):
     """Página pública que lista o título de todos os artigos."""
     artigos = Artigo.objects.all()
-    return render(request, 'news/lista_artigos.html', {'artigos': artigos})
+    return render(request, 'noticias/lista_artigos.html', {'artigos': artigos})
 
 
 def detalhe_artigo(request, artigo_id):
     """Página pública onde o utilizador pode ver o artigo individual."""
     artigo = get_object_or_404(Artigo, pk=artigo_id)
-    return render(request, 'news/detalhe_artigo.html', {'artigo': artigo})
+    return render(request, 'noticias/detalhe_artigo.html', {'artigo': artigo})
 
 
 def comentarios_artigo(request, artigo_id):
@@ -25,7 +25,7 @@ def comentarios_artigo(request, artigo_id):
         return redirect('comentarios_artigo', artigo_id=artigo_id)
 
     comentarios = artigo.comentarios.all()
-    return render(request, 'news/comentarios_artigo.html', {
+    return render(request, 'noticias/comentarios_artigo.html', {
         'artigo': artigo,
         'comentarios': comentarios,
     })

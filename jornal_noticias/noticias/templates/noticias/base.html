@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Jornal de Noticias - Antonio Urdaneta{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink: #1a1008;
+            --ink-light: #3d2e1e;
+            --paper: #f5f0e8;
+            --paper-dark: #ede5d0;
+            --rule: #2a1f0e;
+            --accent: #8b1a1a;
+            --accent-light: #c0392b;
+            --muted: #7a6a55;
+            --serif: 'Playfair Display', Georgia, serif;
+            --body-serif: 'Source Serif 4', Georgia, serif;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: var(--body-serif);
+            min-height: 100vh;
+        }
+
+        /* ── MASTHEAD ── */
+        .masthead {
+            background-color: var(--paper);
+            border-bottom: 4px double var(--rule);
+            padding: 1.2rem 0 0.8rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .masthead::before {
+            content: '';
+            display: block;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, var(--rule) 0px, var(--rule) 6px, transparent 6px, transparent 10px);
+            margin-bottom: 0.8rem;
+        }
+
+        .masthead-date {
+            font-family: var(--body-serif);
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .masthead-name {
+            font-family: var(--serif);
+            font-size: clamp(2.6rem, 7vw, 5.2rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            color: var(--rule);
+            text-transform: uppercase;
+        }
+
+        .masthead-tagline {
+            font-family: var(--body-serif);
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 0.3rem;
+            letter-spacing: 0.06em;
+        }
+
+        .masthead-rule {
+            height: 2px;
+            background: var(--rule);
+            margin-top: 0.8rem;
+        }
+
+        /* ── NAV ── */
+        .nav-bar {
+            background-color: var(--rule);
+            padding: 0.45rem 0;
+            text-align: center;
+        }
+
+        .nav-bar a {
+            color: var(--paper);
+            text-decoration: none;
+            font-family: var(--body-serif);
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 0 1.2rem;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            transition: color 0.2s;
+        }
+
+        .nav-bar a:last-child { border-right: none; }
+        .nav-bar a:hover { color: #e8c97a; }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-content {
+            padding: 2.5rem 0 4rem;
+        }
+
+        /* ── SECTION HEADING ── */
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-heading::before,
+        .section-heading::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: var(--rule);
+        }
+
+        .section-heading h1 {
+            font-family: var(--body-serif);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            white-space: nowrap;
+        }
+
+        /* ── ARTICLE LIST ── */
+        .article-list { list-style: none; }
+
+        .article-list-item {
+            border-bottom: 1px solid var(--paper-dark);
+            padding: 1.4rem 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1.2rem;
+            align-items: baseline;
+        }
+
+        .article-list-item:first-child { padding-top: 0; }
+
+        .article-number {
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--paper-dark);
+            min-width: 2rem;
+            text-align: right;
+            line-height: 1;
+            user-select: none;
+        }
+
+        .article-list-item a {
+            font-family: var(--serif);
+            font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            line-height: 1.25;
+            transition: color 0.15s;
+        }
+
+        .article-list-item a:hover { color: var(--accent); }
+
+        .article-meta {
+            font-size: 0.72rem;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 0.3rem;
+        }
+
+        /* ── ARTICLE DETAIL ── */
+        .article-header { margin-bottom: 2rem; }
+
+        .article-category {
+            display: inline-block;
+            background: var(--rule);
+            color: var(--paper);
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 0.2rem 0.6rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .article-title {
+            font-family: var(--serif);
+            font-size: clamp(1.8rem, 5vw, 3.2rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--rule);
+            margin-bottom: 1rem;
+        }
+
+        .article-date {
+            font-size: 0.78rem;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding-bottom: 1.2rem;
+            border-bottom: 3px solid var(--rule);
+        }
+
+        .article-body {
+            font-size: 1.05rem;
+            line-height: 1.85;
+            color: var(--ink-light);
+            max-width: 68ch;
+        }
+
+        .article-body p { margin-bottom: 1.2em; }
+
+        /* ── BUTTON ── */
+        .btn {
+            display: inline-block;
+            font-family: var(--body-serif);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--paper);
+            background: var(--rule);
+            border: 2px solid var(--rule);
+            padding: 0.65rem 1.6rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--rule);
+        }
+
+        .btn-outline:hover {
+            color: var(--paper);
+        }
+
+        /* ── COMMENTS ── */
+        .comment-form-box {
+            background: var(--paper-dark);
+            border: 1px solid #d4c9b0;
+            padding: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .comment-form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 0.6rem;
+        }
+
+        .comment-form-textarea {
+            width: 100%;
+            min-height: 110px;
+            padding: 0.8rem 1rem;
+            font-family: var(--body-serif);
+            font-size: 0.95rem;
+            color: var(--ink);
+            background: var(--paper);
+            border: 1px solid #c0b090;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+            line-height: 1.6;
+        }
+
+        .comment-form-textarea:focus { border-color: var(--rule); }
+
+        .comment-form-actions {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .comments-list { list-style: none; }
+
+        .comment-item {
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--paper-dark);
+        }
+
+        .comment-item:first-child { padding-top: 0; }
+
+        .comment-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--ink-light);
+        }
+
+        .comment-date {
+            margin-top: 0.4rem;
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .empty-state {
+            font-style: italic;
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding: 1rem 0;
+        }
+
+        /* ── BACK LINK ── */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.15s;
+        }
+
+        .back-link:hover { color: var(--accent); }
+        .back-link::before { content: '←'; font-size: 0.9rem; }
+
+        /* ── FOOTER ── */
+        .footer {
+            background: var(--rule);
+            color: rgba(245,240,232,0.55);
+            text-align: center;
+            padding: 1.4rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<header class="masthead">
+    <div class="container">
+        <p class="masthead-date">{% now "j \d\e F \d\e Y" %}</p>
+        <h1 class="masthead-name">Jornal de Noticias</h1>
+        <p class="masthead-tagline">Noticias bem loucas</p>
+        <div class="masthead-rule"></div>
+    </div>
+</header>
+
+<nav class="nav-bar">
+    <div class="container">
+        <a href="{% url 'lista_artigos' %}">Todas as Notícias</a>
+    </div>
+</nav>
+
+<main class="page-content">
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        &copy; {% now "Y" %} Jornal de Noticias&mdash; Criado por António Urdaneta para a UC AS-II
+    </div>
+</footer>
+
+</body>
+</html>

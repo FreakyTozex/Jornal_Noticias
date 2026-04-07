@@ -1,0 +1,25 @@
+{% extends "noticias/base.html" %}
+
+{% block title %}O Diário — Todas as Notícias{% endblock %}
+
+{% block content %}
+<div class="section-heading">
+    <h1>Todas as Notícias</h1>
+</div>
+
+{% if artigos %}
+<ul class="article-list">
+    {% for artigo in artigos %}
+    <li class="article-list-item">
+        <span class="article-number">{{ forloop.counter }}</span>
+        <div>
+            <a href="{% url 'detalhe_artigo' artigo.id %}">{{ artigo.titulo }}</a>
+            <p class="article-meta">{{ artigo.data_publicacao|date:"j \d\e F \d\e Y · H\hi" }}</p>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="empty-state">Ainda não foram publicados artigos.</p>
+{% endif %}
+{% endblock %}
