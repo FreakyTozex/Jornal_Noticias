@@ -12,7 +12,7 @@ def lista_artigos(request):
             Q(titulo__icontains=query) | Q(corpo__icontains=query)
         )
 
-    return render(request, 'news/lista_artigos.html', {
+    return render(request, 'noticias/lista_artigos.html', {
         'artigos': artigos,
         'query': query,
     })
@@ -20,7 +20,7 @@ def lista_artigos(request):
 
 def detalhe_artigo(request, artigo_id):
     artigo = get_object_or_404(Artigo.objects.select_related('autor'), pk=artigo_id)
-    return render(request, 'news/detalhe_artigo.html', {'artigo': artigo})
+    return render(request, 'noticias/detalhe_artigo.html', {'artigo': artigo})
 
 
 def comentarios_artigo(request, artigo_id):
@@ -42,7 +42,7 @@ def comentarios_artigo(request, artigo_id):
             return redirect('comentarios_artigo', artigo_id=artigo_id)
 
     comentarios = artigo.comentarios.all()
-    return render(request, 'news/comentarios_artigo.html', {
+    return render(request, 'noticias/comentarios_artigo.html', {
         'artigo': artigo,
         'comentarios': comentarios,
         'errors': errors,
