@@ -1,4 +1,4 @@
-Jornal_Noticias
+# Jornal_Noticias
 ## Como utilizar:
     -criar virtual environment (ex: python -m venv virtualenv);
     - entrar no virtualenv (ex: source virtualenv/Scripts/activate);
