@@ -20,14 +20,36 @@
     </p>
     <form method="post">
         {% csrf_token %}
-        <label for="texto" class="comment-form-label">O seu comentário</label>
-        <textarea
-            id="texto"
-            name="texto"
-            class="comment-form-textarea"
-            placeholder="Escreva o seu comentário aqui…"
-            required
-        ></textarea>
+
+        <div style="margin-bottom: 1rem;">
+            <label for="nome_autor" class="comment-form-label">O seu nome <span style="color: var(--accent);">*</span></label>
+            <input
+                type="text"
+                id="nome_autor"
+                name="nome_autor"
+                value="{{ post_data.nome_autor|default:'' }}"
+                class="comment-form-input{% if errors.nome_autor %} input-error{% endif %}"
+                placeholder="Como se chama?"
+                maxlength="100"
+            >
+            {% if errors.nome_autor %}
+            <p class="field-error">{{ errors.nome_autor }}</p>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="texto" class="comment-form-label">Comentário <span style="color: var(--accent);">*</span></label>
+            <textarea
+                id="texto"
+                name="texto"
+                class="comment-form-textarea{% if errors.texto %} input-error{% endif %}"
+                placeholder="Escreva o seu comentário aqui…"
+            >{{ post_data.texto|default:'' }}</textarea>
+            {% if errors.texto %}
+            <p class="field-error">{{ errors.texto }}</p>
+            {% endif %}
+        </div>
+
         <div class="comment-form-actions">
             <button type="submit" class="btn">Submeter Comentário</button>
         </div>
@@ -43,6 +65,7 @@
 <ul class="comments-list">
     {% for comentario in comentarios %}
     <li class="comment-item">
+        <p class="comment-author">{{ comentario.nome_autor }}</p>
         <p class="comment-text">{{ comentario.texto }}</p>
         <p class="comment-date">{{ comentario.data_publicacao|date:"j \d\e F \d\e Y · H\hi" }}</p>
     </li>

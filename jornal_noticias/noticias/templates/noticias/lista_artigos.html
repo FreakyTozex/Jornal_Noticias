@@ -1,11 +1,36 @@
 {% extends "noticias/base.html" %}
 
-{% block title %}Jornal de Noticias — Todas as Notícias{% endblock %}
+{% block title %}Jornal de Noticias{% endblock %}
 
 {% block content %}
+
+<!-- Barra de pesquisa -->
+<form method="get" action="{% url 'lista_artigos' %}" class="search-form">
+    <div class="search-wrapper">
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            placeholder="Pesquisar notícias…"
+            class="search-input"
+            autocomplete="off"
+        >
+        <button type="submit" class="search-btn">Pesquisar</button>
+        {% if query %}
+        <a href="{% url 'lista_artigos' %}" class="search-clear">✕ Limpar</a>
+        {% endif %}
+    </div>
+</form>
+
+{% if query %}
+<div class="section-heading">
+    <h1>Resultados para "{{ query }}"</h1>
+</div>
+{% else %}
 <div class="section-heading">
     <h1>Todas as Notícias</h1>
 </div>
+{% endif %}
 
 {% if artigos %}
 <ul class="article-list">
@@ -14,12 +39,20 @@
         <span class="article-number">{{ forloop.counter }}</span>
         <div>
             <a href="{% url 'detalhe_artigo' artigo.id %}">{{ artigo.titulo }}</a>
-            <p class="article-meta">{{ artigo.data_publicacao|date:"j \d\e F \d\e Y · H\hi" }}</p>
+            <p class="article-meta">
+                {% if artigo.autor %}Por {{ artigo.autor.get_full_name|default:artigo.autor.username }} &middot; {% endif %}
+                {{ artigo.data_publicacao|date:"j \d\e F \d\e Y · H\hi" }}
+            </p>
         </div>
     </li>
     {% endfor %}
 </ul>
 {% else %}
+{% if query %}
+<p class="empty-state">Nenhum artigo encontrado para "<strong>{{ query }}</strong>".</p>
+{% else %}
 <p class="empty-state">Ainda não foram publicados artigos.</p>
 {% endif %}
+{% endif %}
+
 {% endblock %}
