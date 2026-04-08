@@ -12,3 +12,6 @@
     - Dentro do painel de admin podes inserir noticias e comentarios para a pagina principal do jornal de noticias;
     - Entrar no Jornal de noticias http://localhost:8000/noticias;
     - Dentro do Jornal podes ver as noticias criadas pelo admin, ver comentários e adicionar comentários a uma noticia especifica.
+
+# Utilização de AI neste projeto
+Inteligência Artificial foi utilizada para fix em bugs, um models.py melhor construído e para os templates. O restante do projeto foi desenvolvido por mim com documentação do django e tutoriais na internet :p.
